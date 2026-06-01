@@ -126,176 +126,35 @@ const TouristMap = ({ language }: TouristMapProps) => {
   };
 
   return (
-<<<<<<< HEAD
-<section id="map-section"  className="relative py-16 bg-gradient-to-b from-ocean/5 to-background">
-  <div className="container mx-auto px-4">
-    
-    {/* Section Header */}
-    <div className="text-center mb-12 relative">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-4 tracking-wider relative inline-block">
-        {language === 'ar' ? 'خريطة المواقع السياحية' : 
-         language === 'fr' ? 'Carte des Sites Touristiques' : 
-         language === 'es' ? 'Mapa de Sitios Turísticos' :
-         'Tourist Sites Map'}
-        <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-terracotta via-ocean to-sand rounded-full animate-pulse-slow"></span>
-      </h2>
-      <p className="text-muted-foreground max-w-2xl mx-auto mt-3">
-        {language === 'ar' ? 'استكشف أفضل المواقع والمعالم في المدينة مع المعلومات المفصلة لكل موقع' :
-         language === 'fr' ? 'Découvrez les meilleurs sites de la ville avec des informations détaillées pour chaque lieu' :
-         language === 'es' ? 'Explora los mejores sitios de la ciudad con información detallada para cada lugar' :
-         'Explore the best sites in the city with detailed info for each location'}
-      </p>
-    </div>
-    
-    <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-      
-      {/* Interactive Map */}
-    <div className="lg:col-span-2 relative h-full min-h-[500px] rounded-xl overflow-hidden shadow-2xl border border-ocean/20">
-  
-  {/* Map fills entire card */}
-  <div
-    ref={mapRef}
-    className="absolute inset-0 w-full h-full"
-  />
-
-  {/* Floating Map Pins */}
-  {spots.map((spot, index) => (
-    <div
-      key={index}
-      className="absolute bg-ocean/80 hover:bg-terracotta/80 w-4 h-4 rounded-full shadow-lg cursor-pointer animate-bounce-slow transition-all"
-      style={{
-        top: `${spot.mapPosition?.top || 50}%`,
-        left: `${spot.mapPosition?.left || 50}%`,
-        zIndex: selectedLocation?.name === spot.name ? 20 : 10,
-      }}
-      onClick={() => setSelectedLocation(spot)}
-      title={spot.name}
-    />
-  ))}
-</div>
-
-      
-      {/* Featured Spots Cards */}
-      <div className="mt-10 lg:mt-0 space-y-6">
-        <h3 className="text-2xl font-semibold text-foreground mb-6 flex items-center gap-2">
-          <MapPin className="text-ocean w-6 h-6" />
-          {language === 'ar' ? 'المواقع المميزة' : 
-           language === 'fr' ? 'Sites Remarquables' : 
-           language === 'es' ? 'Sitios Destacados' :
-           'Featured Sites'}
-        </h3>
-
-        {spots.map((spot, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedLocation(spot)}
-            className={`cursor-pointer transform transition-all duration-300 hover:-translate-y-2 hover:scale-105 rounded-2xl shadow-lg p-4 bg-gradient-to-tr from-white/70 to-ocean/10 border-l-4 ${
-              selectedLocation?.name === spot.name ? 'border-l-ocean bg-ocean/20' : 'border-l-transparent'
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className={`px-2 py-1 rounded-full text-xs font-semibold text-white ${getTypeColor(spot.type)}`}>
-                {spot.type}
-              </span>
-              {spot.duration && <span className="text-sm text-muted-foreground">{spot.duration} min</span>}
-            </div>
-            
-            <h4 className="font-bold text-lg text-foreground">{spot.name}</h4>
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-3">{spot.description}</p>
-            
-            {/* Extra Info */}
-            <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
-              {spot.openingHours && <span>⏰ {spot.openingHours}</span>}
-              {spot.entryFee && <span>💰 {spot.entryFee}</span>}
-              {spot.tip && <span>💡 {spot.tip}</span>}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Selected Location Details */}
-    {selectedLocation && (
-      <div className="mt-10 relative">
-        <Card className="border-ocean/30 bg-ocean/10 shadow-2xl rounded-2xl overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Info className="text-ocean w-6 h-6" />
-                <h3 className="text-xl font-semibold">{selectedLocation.name}</h3>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium text-white ${getTypeColor(selectedLocation.type)}`}>
-                  {selectedLocation.type}
-                </span>
-              </div>
-              
-              {selectedLocation.coordinates && (
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.coordinates.lat},${selectedLocation.coordinates.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-ocean font-medium hover:underline text-sm"
-                >
-                  {language === 'ar' ? 'الاتجاهات' : language === 'fr' ? 'Itinéraire' : language === 'es' ? 'Dirección' : 'Get Directions'}
-                </a>
-              )}
-            </div>
-            
-            <p className="text-muted-foreground mb-3">{selectedLocation.description}</p>
-
-            {/* Extra Tourist Info */}
-            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-              {selectedLocation.openingHours && <div>⏰ {selectedLocation.openingHours}</div>}
-              {selectedLocation.entryFee && <div>💰 {selectedLocation.entryFee}</div>}
-              {selectedLocation.tip && <div>💡 {selectedLocation.tip}</div>}
-              {selectedLocation.website && (
-                <a href={selectedLocation.website} target="_blank" className="text-ocean hover:underline">
-                  🔗 {language === 'ar' ? 'الموقع الرسمي' : language === 'fr' ? 'Site officiel' : language === 'es' ? 'Sitio oficial' : 'Official Website'}
-                </a>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Decorative floating shapes */}
-        <div className="absolute -top-12 -left-12 w-24 h-24 bg-terracotta/20 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-ocean/20 rounded-full blur-3xl animate-pulse-slow" />
-      </div>
-    )}
-  </div>
-</section>
-
-
-
-=======
     <section id="map-section" className="py-16 bg-gradient-to-b from-background to-sand/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            {language === 'ar' ? 'خريطة المواقع السياحية' : 
-             language === 'fr' ? 'Carte des Sites Touristiques' : 
+            {language === 'ar' ? 'خريطة المواقع السياحية' :
+             language === 'fr' ? 'Carte des Sites Touristiques' :
              language === 'es' ? 'Mapa de Sitios Turísticos' :
              'Tourist Sites Map'}
           </h2>
         </div>
-        
+
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Card className="overflow-hidden shadow-xl">
               <div ref={mapRef} className="h-[500px] w-full" />
             </Card>
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="text-2xl font-semibold text-foreground mb-6 flex items-center">
               <MapPin className="mr-2 text-ocean" />
-              {language === 'ar' ? 'المواقع المميزة' : 
-               language === 'fr' ? 'Sites Remarquables' : 
+              {language === 'ar' ? 'المواقع المميزة' :
+               language === 'fr' ? 'Sites Remarquables' :
                language === 'es' ? 'Sitios Destacados' :
                'Featured Sites'}
             </h3>
-            
+
             {spots.map((spot, index) => (
-              <Card 
+              <Card
                 key={index}
                 className={`cursor-pointer transition-all duration-300 hover:shadow-lg border-l-4 ${
                   selectedLocation?.name === spot.name ? 'border-l-ocean bg-ocean/5' : 'border-l-transparent'
@@ -315,7 +174,7 @@ const TouristMap = ({ language }: TouristMapProps) => {
             ))}
           </div>
         </div>
-        
+
         {selectedLocation && (
           <Card className="mt-8 border-ocean/20 bg-ocean/5">
             <CardContent className="p-6">
@@ -332,7 +191,6 @@ const TouristMap = ({ language }: TouristMapProps) => {
         )}
       </div>
     </section>
->>>>>>> f1b1bfbefdf499466fa5a95df27209f7c59ea955
   );
 };
 
